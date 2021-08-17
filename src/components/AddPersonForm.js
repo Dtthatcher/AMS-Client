@@ -122,7 +122,6 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
         }).then(() => {
             console.log ("submitted also  " + obj2)
         })
-        personCallback(name, position)
         window.location.reload()
         handleClose()
     }    
@@ -135,13 +134,14 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
     return (
     <div>
     <Modal show={show} onHide={handleClose} >
-        <Modal.Header closeButton>
-          <Modal.Title>Please Choose Building and Floor</Modal.Title>
+        <Modal.Header>
+            <Modal.Title>Please Choose Building and Floor</Modal.Title>
+            <Button variant="outline-dark" onClick={handleClose}>X</Button>
         </Modal.Header>
         <Modal.Body>
         <Form>
             <Form.Group onSubmit={handleSubmit}>
-                Building
+                <strong>Building</strong>
                 <Form.Control
                     as="select"
                     onChange={handleBuildingChange}
@@ -156,7 +156,8 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
                     </option>
                 ))}
                 </Form.Control>
-                Floor
+                <br/>
+                <strong>Floor</strong>
                 <Form.Control
                     as="select"
                     onChange={handleFloorChange}
@@ -172,7 +173,8 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
                     </option>
                 ))}
                 </Form.Control>
-                <br></br>
+                <br/>
+                <strong>Room</strong>
                 <Form.Control
                     as="select"
                     onChange={handleRoomChange}                    
@@ -187,7 +189,8 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
                         </option>
                     ))}
                 </Form.Control>
-                <br></br>
+                <br/>
+                <strong>People</strong>
                 <Form.Control
                     as="select"
                     onChange={handlePersonChange}

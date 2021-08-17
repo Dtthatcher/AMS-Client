@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Form, ListGroup, Modal, Button} from 'react-bootstrap'
+import {Form, ListGroup, Modal, Button, CloseButton} from 'react-bootstrap'
 
 
 
@@ -35,7 +35,7 @@ const AddRoomForm = ({handleClose, show, rooms}) => {
           .then(data =>{
             setAllRoomsBF(data)
           })
-      },[BuildingNumber, floorNumber, floorNumberAndId])
+      },[BuildingNumber, floorNumber])
 
       useEffect(() => {
         
@@ -81,11 +81,12 @@ const AddRoomForm = ({handleClose, show, rooms}) => {
     return (
     <div>
     <Modal show={show} onHide={handleClose} >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Please Choose Building and Floor</Modal.Title>
+          <Button variant="outline-dark" onClick={() => {setAllRoomsBF(null); handleClose()}}>X</Button>
         </Modal.Header>
         <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form id="addRoomForm" onSubmit={handleSubmit}>
             <Form.Group>
                 Building
                 <Form.Control
@@ -138,10 +139,10 @@ const AddRoomForm = ({handleClose, show, rooms}) => {
         </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={() => {setAllRoomsBF(null); handleClose()}}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button type="Submit" variant="primary" onClick={handleSubmit}>
             Add Room
           </Button>
         </Modal.Footer>

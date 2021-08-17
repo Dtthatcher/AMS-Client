@@ -5,8 +5,8 @@ import {Route} from "react-router-dom"
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Dashboard from "./containers/Dashboard.component";
-import Login from "./containers/loginPage.component";
+import Dashboard from "./containers/Dashboard.container";
+import Login from "./components/loginPage.component";
 
 
 
