@@ -76,7 +76,7 @@ function Dashboard() {
         }
         <br/>
         <h2><strong>Who's Available for a Room!!</strong></h2>
-        <ListGroup style={{width: "300px"}}>{rooms && allPeople && allPeople.map((person) => (
+        <ListGroup style={{width: "40%", margin:"auto"}}>{rooms && allPeople && allPeople.map((person) => (
           rooms.map((el) => (
             el.Id === person.RoomId ? <ListGroup.Item style={{backgroundColor: "lightblue", color: "red"}}>
             {person.Name} the {person.Position} is in Building {el.BuildingNumber} Floor {el.FloorNumber} Room {el.RoomNumber}</ListGroup.Item> : null

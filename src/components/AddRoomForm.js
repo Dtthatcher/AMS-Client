@@ -132,10 +132,9 @@ const AddRoomForm = ({handleClose, show, rooms}) => {
             <br></br>
             <ListGroup>
             {allRoomsBF && allRoomsBF.map((room) => (
-                <ListGroup.Item>Room Number {room.RoomNumber} is {(room.Available ? "Available" :"Not Available")}</ListGroup.Item>
+                <ListGroup.Item>Room Number {room.RoomNumber} Already Exists and is {(room.Available ? "Available" :"Not Available")}</ListGroup.Item>
             ))}
             </ListGroup>
-            <p>{RoomNumber}</p>
         </Form>
         </Modal.Body>
         <Modal.Footer>

@@ -24,12 +24,27 @@ const MainTable = ({allPeople}) => {
         },[])
         
         
+        const deleteRoom = (e) => {
+            const clicked = e.target.value
+
+            // const obj = JSON.stringify({"id": clicked})
+            fetch(`http://localhost:8080/api/room/${clicked}`, {
+                method: 'DELETE',
+                headers: {"Access-Control-Request-Method": "DELETE"},
+                // body: obj
+            }).then(() => {
+                console.log("Deleted that Ish  " )
+            })
+            console.log(allRooms)        
+            window.location.reload()            
+
+        }
+
         const reset = (clickedId) => {
-            const clicked = clickedId.target.value
-       
+            const clicked = clickedId.target.value       
  
             const obj = JSON.stringify({"id": clicked, "Available": true})  
-            const obj2 = JSON.stringify({"id": allPeople && allPeople.filter(person => person.RoomId == clicked)[0]["id"], "RoomId": null})
+            const obj2 = JSON.stringify({"id": allPeople && allPeople.filter(person => person.RoomId === clicked)[0]["id"], "RoomId": null})
             fetch('http://localhost:8080/api/room', {
                 method: 'PUT',
                 headers: { "Content-Type": "application/json", "Access-Control-Request-Method": "PUT"},
@@ -51,48 +66,79 @@ const MainTable = ({allPeople}) => {
           let buildingCount = 0
           let floorCount = 0
 
-          let res = allRooms && allRooms.map((room) => (
+          let res = allRooms && allRooms.map((room) => (  // render the table
             <tr>
-                {buildingCount !== room.BuildingNumber ?                
+                {buildingCount !== room.BuildingNumber ?   // render the building number. render empty cell until new building number
                     function x(){
                         buildingCount = room.BuildingNumber
-                        return <td>Building Number {room.BuildingNumber}</td>            
+                        return <td key="room.BuildingNumber">Building Number {room.BuildingNumber}</td>            
                       }()
                     :
-                <td></td>}
-                <td>{buildingCount === room.BuildingNumber && floorCount !== room.FloorNumber || room.Id === 2 ?                
+                <td key={`empty building cell ${room.BuildingNumber}`}></td>}  
+                {buildingCount === room.BuildingNumber && floorCount !== room.FloorNumber || room.Id === 2 ?// render the floor number. render empty cell until new floor number           
                     function x(){
                         floorCount = room.FloorNumber                        
-                        return <td>Floor Number {room.FloorNumber}</td>            
+                        return <td key="room.FloorNumbe">Floor Number {room.FloorNumber}</td>            
                       }()                    
                     :
-                <td></td>}
-                </td>
-                {room.Available === true ? 
-                    <td style={{backgroundColor: "lightgreen"}}>Room Number {room.RoomNumber} is Available</td>
-                    : <td style={{backgroundColor: "red"}}>                    
-                      Room Number {room.RoomNumber}<OverlayTrigger
-                    placement="top"
-                    trigger="hover"
-                    overlay={
-                        <Tooltip id={`tooltip-remove-person`}>
-                          Would You Like to Remove<br/>the Person From This Room?
-                        </Tooltip>
+                <td key={`emptyFloorCell ${room.floorNumber}`}></td>}                
+                {room.Available === true ? // render the room based on availability. green yes, red no
+                    <td style={{backgroundColor: "lightgreen"}} key="room.RoomNumber">
+                    Room Number {room.RoomNumber}
+                    <OverlayTrigger
+                        key={`overlay for ${room.RoomNumber}`}
+                        placement="top"
+                        trigger="hover"
+                        overlay={
+                            <Tooltip id={`tooltip-remove-person`} key="toolTip">
+                                You are about to Remove<br/>This Room From the Database
+                            </Tooltip>
+                        }
+                        >
+                        <Button
+                            key={`delete for ${room.RoomNumber}`}
+                            style={{position:"relative"}}
+                            className="mb-2 float-sm-end"
+                            size="sm"
+                            id="toggle-check"
+                            variant="outline-light"
+                            value={room.Id}
+                            onClick={deleteRoom}
+                        >
+                        X
+                        </Button>
+                    </OverlayTrigger>
+                        <br/>is Available</td>
+                    : <td style={{backgroundColor: "red"}} key="room.RoomNumber">                    
+                        {allPeople && allRooms && allPeople.map(
+                            (person) => person.RoomId === room.Id ? 
+                            `${person.Name} the ${person.Position} is in`
+                            : null)}                    
+                        <OverlayTrigger
+                            key={`overlay for ${room.RoomNumber}`}
+                            placement="top"
+                            trigger="hover"
+                            overlay={
+                                <Tooltip id={`tooltip-remove-person`} key="toolTip">
+                                    You are about to Remove<br/>the Person From This Room
+                                </Tooltip>
                             }
                         >
-                    <Button
-                        style={{position:"relative"}}
-                        className="mb-2 float-sm-end"
-                        size="sm"
-                        id="toggle-check"
-                        variant="outline-light"
-                        value={room.Id}
-                        onClick={reset}
-                    >
-                    X
-                    </Button>
-                </OverlayTrigger>
-                    <br/>Is NOT Available
+                        <Button
+                            key={`reset for ${room.RoomNumber}`}
+                            style={{position:"relative"}}
+                            className="mb-2 float-sm-end"
+                            size="sm"
+                            id="toggle-check"
+                            variant="outline-light"
+                            value={room.Id}
+                            onClick={reset}
+                        >
+                        X
+                        </Button>
+                        </OverlayTrigger>
+                    <br/>
+                        Room Number {room.RoomNumber}
                     </td>
 
                 }

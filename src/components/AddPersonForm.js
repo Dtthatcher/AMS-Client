@@ -35,7 +35,7 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
           .then(data =>{
             setAllPeople(data)
           })
-      },[BuildingNumber],[floorNumber],[RoomNumber])
+      },[RoomNumber])
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/floor/${BuildingNumber}`)
@@ -55,7 +55,8 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
           .then(data =>{
             setAllRoomsBF(data)
           })
-      },[BuildingNumber, floorNumber, floorNumberAndId, PersonNamePosition])
+    //   },[BuildingNumber, floorNumber, floorNumberAndId, PersonNamePosition])
+        },[floorNumber])
     
       useEffect(() => {
           if (PersonNamePosition){
