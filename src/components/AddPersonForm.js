@@ -107,7 +107,6 @@ const AddPersonForm = ({handleClose, show, rooms, personCallback}) => {
         const PersonId = personId              
         const obj = JSON.stringify({"id": roomId, Available})
         const obj2 = JSON.stringify({"id": PersonId, RoomId})
-
         fetch('http://localhost:8080/api/room', {
             method: 'PUT',
             headers: { "Content-Type": "application/json", "Access-Control-Request-Method": "PUT"},

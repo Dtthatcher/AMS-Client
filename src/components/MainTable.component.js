@@ -44,7 +44,7 @@ const MainTable = ({allPeople}) => {
             const clicked = clickedId.target.value       
  
             const obj = JSON.stringify({"id": clicked, "Available": true})  
-            const obj2 = JSON.stringify({"id": allPeople && allPeople.filter(person => person.RoomId === clicked)[0]["id"], "RoomId": null})
+            const obj2 = JSON.stringify({"id": allPeople && allPeople.filter(person => person.RoomId == clicked)[0]["id"], "RoomId": null})
             fetch('http://localhost:8080/api/room', {
                 method: 'PUT',
                 headers: { "Content-Type": "application/json", "Access-Control-Request-Method": "PUT"},
@@ -71,14 +71,15 @@ const MainTable = ({allPeople}) => {
                 {buildingCount !== room.BuildingNumber ?   // render the building number. render empty cell until new building number
                     function x(){
                         buildingCount = room.BuildingNumber
+                        floorCount = 0
                         return <td key="room.BuildingNumber">Building Number {room.BuildingNumber}</td>            
                       }()
                     :
                 <td key={`empty building cell ${room.BuildingNumber}`}></td>}  
-                {buildingCount === room.BuildingNumber && floorCount !== room.FloorNumber || room.Id === 2 ?// render the floor number. render empty cell until new floor number           
+                {buildingCount === room.BuildingNumber && floorCount !== room.FloorNumber ?// render the floor number. render empty cell until new floor number           
                     function x(){
                         floorCount = room.FloorNumber                        
-                        return <td key="room.FloorNumbe">Floor Number {room.FloorNumber}</td>            
+                        return <td>Floor Number {room.FloorNumber}</td>            
                       }()                    
                     :
                 <td key={`emptyFloorCell ${room.floorNumber}`}></td>}                
