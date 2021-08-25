@@ -15,6 +15,7 @@ function Dashboard() {
   
   const [rooms, setRooms] = useState(null)
   const [allPeople, setAllPeople] = useState(null)
+  const [refresh, setRefresh] = useState(true)
 
   const handleCloseRoomForm = () => setShowRoomForm(false);
   const handleShowRoomForm = () => setShowRoomForm(true);
@@ -30,7 +31,7 @@ function Dashboard() {
       .then(data =>{
         setRooms(data)
       })
-  }, [])
+  }, [refresh, showPersonForm])
 
   useEffect(() => {
     fetch('http://localhost:8080/api/people')
@@ -38,12 +39,20 @@ function Dashboard() {
         return res.json();
       })
       .then(data =>{
-        setAllPeople(data)
+        setAllPeople(data)        
       })
-  }, [])
+      setRefresh(true)
+  }, [refresh, showPersonForm])
 
-
-
+  const handleShowTable = () => {
+    const x = document.getElementById("mainTable");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+  
   return (
     
     <div syle={{display: 'block', width: "100%", padding: 0 }}>
@@ -56,22 +65,34 @@ function Dashboard() {
               </Button>
               <Button variant="primary" onClick={handleShowPersonForm} style={{margin: "20px" }}>
               Assign Person To Room
-              </Button>          
+              </Button>
+              <Button variant="primary" onClick={handleShowTable} style={{margin: "20px" }}>
+              Show Main Table
+              </Button>                
             </Nav>
           </Container>
       </Navbar>
 
       <div>
       <Container style={{marginTop: "100px"}}>
-        <AddRoomForm handleClose={handleCloseRoomForm} rooms={rooms} show={showRoomForm} />
+        <AddRoomForm 
+          handleClose={handleCloseRoomForm} 
+          rooms={rooms} 
+          show={showRoomForm}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          />
         <AddPersonForm 
           handleClose={handleClosePersonForm} 
-          rooms={rooms} 
+          rooms={rooms}
+          refresh={refresh}
+          setRefresh={setRefresh}
           show={showPersonForm} 
           />
-        {allPeople &&
+        <div id="mainTable" style={{display: "none"}}>
+        {allPeople && rooms && refresh &&
         <MainTable
-          allPeople={allPeople} 
+          allPeople={allPeople} rooms={rooms} setRefresh={setRefresh} refresh={refresh}
           />
         }
         <br/>
@@ -87,7 +108,10 @@ function Dashboard() {
         <ListGroup style={{width: "40%", margin:"auto"}}>
         {allPeople && allPeople.map((peeps) => (
           peeps.RoomId ? null : <ListGroup.Item style={{backgroundColor: "lightgreen"}}>{peeps.Name} the {peeps.Position} is homeless</ListGroup.Item>))}
-        </ListGroup></Container></div>            
+        </ListGroup>
+        </div>
+        </Container>
+        </div>            
     </div>
     
   )

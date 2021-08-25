@@ -3,25 +3,21 @@ import { OverlayTrigger, Tooltip, Button, Table } from 'react-bootstrap'
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-const MainTable = ({allPeople}) => {
+const MainTable = ({allPeople, setRefresh, refresh, rooms}) => {
 
-    const [allRooms, setAllRooms] = useState(null)
-    const [reload, setReload] = useState(false)
+    // const [allRooms, setAllRooms] = useState(null)
+    // const [refresh, setRefresh] = useState(false)
 
-    useEffect(() => {
-        setTimeout(() => {}, 0)
-        return setReload(false)
-    },[reload])
-
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/room`)
-          .then(res => {
-            return res.json();
-          })
-          .then(data =>{
-            setAllRooms(data)
-          })
-        },[])
+    
+    // useEffect(() => {
+    //     fetch(`http://localhost:8080/api/room`)
+    //       .then(res => {
+    //         return res.json();
+    //       })
+    //       .then(data =>{
+    //         setAllRooms(data)
+    //       })
+    //     },[refresh])
         
         
         const deleteRoom = (e) => {
@@ -35,24 +31,15 @@ const MainTable = ({allPeople}) => {
             }).then(() => {
                 console.log("Deleted that Ish  " )
             })
-            console.log(allRooms)        
-            window.location.reload()            
-
+            setRefresh(false)
+            // setRefresh(!refresh)
         }
 
         const reset = (clickedId) => {
-            const clicked = clickedId.target.value       
+            const clicked = clickedId.target.value           
  
-            const obj = JSON.stringify({"id": clicked, "Available": true})  
             const obj2 = JSON.stringify({"id": allPeople && allPeople.filter(person => person.RoomId == clicked)[0]["id"], "RoomId": null})
-            fetch('http://localhost:8080/api/room', {
-                method: 'PUT',
-                headers: { "Content-Type": "application/json", "Access-Control-Request-Method": "PUT"},
-                body: obj
-            }).then(() => {
-                console.log("Updated that Ish  " + obj)
-            })
-
+        
             fetch('http://localhost:8080/api/people', {
                 method: 'PUT',
                 headers: { "Content-Type": "application/json", "Access-Control-Request-Method": "PUT"},
@@ -60,13 +47,14 @@ const MainTable = ({allPeople}) => {
             }).then(() => {
                 console.log ("submitted also  " + obj2)
             })
-            window.location.reload()            
+            setRefresh(false)
+
       }
       const buildTable = () => {
           let buildingCount = 0
           let floorCount = 0
 
-          let res = allRooms && allRooms.map((room) => (  // render the table
+          let res = rooms && allPeople && rooms.map((room) => (  // render the table
             <tr>
                 {buildingCount !== room.BuildingNumber ?   // render the building number. render empty cell until new building number
                     function x(){
@@ -111,7 +99,7 @@ const MainTable = ({allPeople}) => {
                     </OverlayTrigger>
                         <br/>is Available</td>
                     : <td style={{backgroundColor: "red"}} key="room.RoomNumber">                    
-                        {allPeople && allRooms && allPeople.map(
+                        {allPeople && rooms && allPeople.map(
                             (person) => person.RoomId === room.Id ? 
                             `${person.Name} the ${person.Position} is in`
                             : null)}                    
@@ -159,7 +147,7 @@ const MainTable = ({allPeople}) => {
                     </tr>
                 </thead>
                 <tbody>
-                {allRooms && buildTable()}
+                {rooms && allPeople && buildTable()}
                 </tbody>
                 
             </Table>      

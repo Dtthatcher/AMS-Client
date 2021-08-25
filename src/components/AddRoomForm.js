@@ -3,7 +3,7 @@ import {Form, ListGroup, Modal, Button, CloseButton} from 'react-bootstrap'
 
 
 
-const AddRoomForm = ({handleClose, show, rooms}) => {
+const AddRoomForm = ({handleClose, show, rooms, refresh, setRefresh}) => {
 
     const [allRoomsBF, setAllRoomsBF] = useState(null)
     const [allFloorsB, setAllFloorsB] = useState(null)
@@ -67,8 +67,9 @@ const AddRoomForm = ({handleClose, show, rooms}) => {
         }).then(() => {
             console.log("Added that Ish")
         })
-        window.location.reload()
+        // window.location.reload()
         handleClose()
+        setRefresh(false)
     }
 
     function allBuildings(){
