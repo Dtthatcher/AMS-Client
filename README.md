@@ -13,4 +13,6 @@ The local DB was MySQL
 The backend is Kotlin KTOR with exposed DSL for DB calls
 The frontend is a basic Create React App with ReactStrap and Hooks
 
+The repo is spit into a frontend and backend branch for easier readability
+
 Feel free to review the code and reach out if you have any questions!
